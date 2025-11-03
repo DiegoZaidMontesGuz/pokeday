@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Date Modes</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #000;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+      text-align: center;
+      width: 300px;
+    }
+
+    .modes {
+      display: flex;
+      gap: 10px;
+    }
+
+    .mode-btn {
+      background: yellow;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mode-btn.active {
+      background: orange;
+      transform: scale(1.05);
+    }
+
+    input[type="date"] {
+      margin-top: 1rem;
+      padding: 0.4rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    #output {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Welcome</h1>
+  </div>
+
+  <div class="modes">
+    <button class="mode-btn active" data-mode="1">Mode 1</button>
+    <button class="mode-btn" data-mode="2">Mode 2</button>
+    <button class="mode-btn" data-mode="3">Mode 3</button>
+  </div>
+
+  <div class="card">
+    <label for="date">Select a date</label><br>
+    <input type="date" id="date">
+    <div id="output">No date selected</div>
+  </div>
+
+  <div class="modes">
+    <button class="mode-btn active" >Go</button>
+  </div>
+
+  <script>
+    let currentMode = 1;
+    const buttons = document.querySelectorAll(".mode-btn");
+    const dateInput = document.getElementById("date");
+    const output = document.getElementById("output");
+
+    // Handle mode change
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentMode = parseInt(btn.dataset.mode);
+        output.textContent = `Switched to Mode ${currentMode}.`;
+      });
+    });
+
+    // Handle date selection
+    dateInput.addEventListener("change", () => {
+      const selected = dateInput.value;
+      if (!selected) return;
+
+      const date = new Date(selected);
+      let result = "";
+
+      switch (currentMode) {
+        case 1:
+          result = `Mode 1 → ${date.toDateString()}`;
+          break;
+        case 2:
+          result = `Mode 2 → ${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+          break;
+        case 3:
+          result = `Mode 3 → Day of year: ${Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000)}`;
+          break;
+      }
+
+      output.textContent = result;
+    });
+  </script>
+
+</body>
+</html>
